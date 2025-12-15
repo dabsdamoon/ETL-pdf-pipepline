@@ -226,6 +226,58 @@ class LanceDBStore:
         table = self._ensure_table()
         return table.count_rows()
 
+    def get_chunks_by_document(self, document_id: str, limit: int = 100) -> list[dict]:
+        """
+        Get all chunks for a document.
+
+        Args:
+            document_id: Document ID to filter by
+            limit: Maximum number of chunks to return
+
+        Returns:
+            List of chunk records
+        """
+        table = self._ensure_table()
+
+        try:
+            # Use SQL query to filter by document_id
+            results = (
+                table.search()
+                .where(f"document_id = '{document_id}'")
+                .limit(limit)
+                .to_list()
+            )
+            # Sort by chunk_index
+            results.sort(key=lambda x: x.get("chunk_index", 0))
+            return results
+        except Exception as e:
+            logger.warning(f"Get chunks by document failed: {e}")
+            return []
+
+    def get_chunk(self, chunk_id: str) -> Optional[dict]:
+        """
+        Get a single chunk by ID.
+
+        Args:
+            chunk_id: Chunk ID
+
+        Returns:
+            Chunk record or None if not found
+        """
+        table = self._ensure_table()
+
+        try:
+            results = (
+                table.search()
+                .where(f"id = '{chunk_id}'")
+                .limit(1)
+                .to_list()
+            )
+            return results[0] if results else None
+        except Exception as e:
+            logger.warning(f"Get chunk failed: {e}")
+            return None
+
     def close(self):
         """Close the database connection."""
         self._db = None
