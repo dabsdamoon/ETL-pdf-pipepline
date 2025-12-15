@@ -2,34 +2,35 @@
 # Install with: pip install -r requirements.txt
 
 # PDF Processing
-pymupdf>=1.24.0
-pymupdf4llm>=0.0.5
+pymupdf
+pymupdf4llm
 
 # Text Processing
-langchain>=0.2.0
-langchain-text-splitters>=0.2.0
-tiktoken>=0.5.0
+langchain
+langchain-text-splitters
+tiktoken
 
 # Embeddings
-sentence-transformers>=2.2.0
-openai>=1.0.0
+# torch - install via conda: conda install pytorch -c pytorch
+sentence-transformers
+openai
 
 # Vector Database (Local) - LanceDB with native hybrid search
-lancedb>=0.4.0
-pyarrow>=14.0.0
+lancedb
+pyarrow
 
 # Database
-# supabase>=2.0.0  # Uncomment for production
+# supabase  # Uncomment for production
 
 # Image Processing
-Pillow>=10.0.0
+Pillow
 
 # Utilities
-python-dotenv>=1.0.0
-tqdm>=4.65.0
-pydantic>=2.0.0
-pyyaml>=6.0.0
+python-dotenv
+tqdm
+pydantic
+pyyaml
 
 # Development
-pytest>=7.0.0
-pytest-cov>=4.0.0
+pytest
+pytest-cov

@@ -1,1 +1,8 @@
 pdfs/
+pdfs*
+
+.env
+
+data/
+
+logs/
