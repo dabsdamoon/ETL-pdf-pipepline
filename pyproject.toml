@@ -1,0 +1,105 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "etl-pdf-pipeline"
+version = "0.1.0"
+description = "ETL Pipeline for PDF Document Processing with vector embeddings"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [
+    {name = "Houmy Team"}
+]
+keywords = ["etl", "pdf", "embeddings", "rag", "vector-search", "langchain"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Text Processing :: Indexing",
+]
+
+dependencies = [
+    # PDF Processing
+    "pymupdf>=1.23.0",
+    "pymupdf4llm>=0.0.5",
+    # Text Processing
+    "langchain>=0.1.0",
+    "langchain-text-splitters>=0.0.1",
+    "tiktoken>=0.5.0",
+    # Embeddings
+    "sentence-transformers>=2.2.0",
+    "openai>=1.0.0",
+    # Vector Database (Local)
+    "lancedb>=0.4.0",
+    "pyarrow>=14.0.0",
+    # Image Processing
+    "Pillow>=10.0.0",
+    # Utilities
+    "python-dotenv>=1.0.0",
+    "tqdm>=4.66.0",
+    "pydantic>=2.0.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+api = [
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "python-multipart>=0.0.6",
+]
+supabase = [
+    "psycopg2-binary>=2.9.9",
+]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+]
+all = [
+    "etl-pdf-pipeline[api,supabase,dev]",
+]
+
+[project.urls]
+Homepage = "https://github.com/houmy/etl-pdf-pipeline"
+Repository = "https://github.com/houmy/etl-pdf-pipeline"
+
+[project.scripts]
+etl-pdf = "etl_pdf_pipeline.cli:main"
+
+[tool.setuptools]
+packages = ["etl_pdf_pipeline", "etl_pdf_pipeline.extract", "etl_pdf_pipeline.transform", "etl_pdf_pipeline.load", "etl_pdf_pipeline.retrieve", "etl_pdf_pipeline.api", "etl_pdf_pipeline.api.routes"]
+
+[tool.setuptools.package-dir]
+"etl_pdf_pipeline" = "src"
+"etl_pdf_pipeline.extract" = "src/extract"
+"etl_pdf_pipeline.transform" = "src/transform"
+"etl_pdf_pipeline.load" = "src/load"
+"etl_pdf_pipeline.retrieve" = "src/retrieve"
+"etl_pdf_pipeline.api" = "src/api"
+"etl_pdf_pipeline.api.routes" = "src/api/routes"
+
+[tool.setuptools.package-data]
+"*" = ["py.typed"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310", "py311", "py312"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+select = ["E", "F", "I", "N", "W", "UP"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --cov=src --cov-report=term-missing"

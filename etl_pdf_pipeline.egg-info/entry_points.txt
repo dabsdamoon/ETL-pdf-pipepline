@@ -1,0 +1,2 @@
+[console_scripts]
+etl-pdf = etl_pdf_pipeline.cli:main

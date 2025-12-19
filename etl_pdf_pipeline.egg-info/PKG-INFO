@@ -1,0 +1,47 @@
+Metadata-Version: 2.4
+Name: etl-pdf-pipeline
+Version: 0.1.0
+Summary: ETL Pipeline for PDF Document Processing with vector embeddings
+Author: Houmy Team
+License: MIT
+Project-URL: Homepage, https://github.com/houmy/etl-pdf-pipeline
+Project-URL: Repository, https://github.com/houmy/etl-pdf-pipeline
+Keywords: etl,pdf,embeddings,rag,vector-search,langchain
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Topic :: Text Processing :: Indexing
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: pymupdf>=1.23.0
+Requires-Dist: pymupdf4llm>=0.0.5
+Requires-Dist: langchain>=0.1.0
+Requires-Dist: langchain-text-splitters>=0.0.1
+Requires-Dist: tiktoken>=0.5.0
+Requires-Dist: sentence-transformers>=2.2.0
+Requires-Dist: openai>=1.0.0
+Requires-Dist: lancedb>=0.4.0
+Requires-Dist: pyarrow>=14.0.0
+Requires-Dist: Pillow>=10.0.0
+Requires-Dist: python-dotenv>=1.0.0
+Requires-Dist: tqdm>=4.66.0
+Requires-Dist: pydantic>=2.0.0
+Requires-Dist: pyyaml>=6.0
+Provides-Extra: api
+Requires-Dist: fastapi>=0.104.0; extra == "api"
+Requires-Dist: uvicorn[standard]>=0.24.0; extra == "api"
+Requires-Dist: python-multipart>=0.0.6; extra == "api"
+Provides-Extra: supabase
+Requires-Dist: psycopg2-binary>=2.9.9; extra == "supabase"
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.0.0; extra == "dev"
+Requires-Dist: black>=23.0.0; extra == "dev"
+Requires-Dist: ruff>=0.1.0; extra == "dev"
+Provides-Extra: all
+Requires-Dist: etl-pdf-pipeline[api,dev,supabase]; extra == "all"
