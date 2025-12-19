@@ -85,12 +85,21 @@ class EmbeddingConfig:
     openai_model: str = "text-embedding-3-small"
     local_model: str = "all-MiniLM-L6-v2"
     batch_size: int = 100
+    # Explicit dimension override (None = use model default)
+    # text-embedding-3-small default: 1536
+    # text-embedding-3-large default: 3072 (can be reduced to 256-3072)
+    dimension: int = None
 
-    @property
-    def dimension(self) -> int:
-        if self.provider == "openai":
-            return 1536
-        return 384  # all-MiniLM-L6-v2
+    def __post_init__(self):
+        # Set default dimension based on model if not explicitly set
+        if self.dimension is None:
+            if self.provider == "openai":
+                if "large" in self.openai_model:
+                    self.dimension = 3072
+                else:
+                    self.dimension = 1536
+            else:
+                self.dimension = 384  # all-MiniLM-L6-v2
 
 
 @dataclass

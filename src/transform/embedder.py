@@ -89,10 +89,16 @@ class Embedder:
             )
 
             try:
-                response = client.embeddings.create(
-                    model=self.config.openai_model,
-                    input=batch,
-                )
+                # Build API params
+                api_params = {
+                    "model": self.config.openai_model,
+                    "input": batch,
+                }
+                # Add dimensions for models that support it (text-embedding-3-*)
+                if "text-embedding-3" in self.config.openai_model and self.config.dimension:
+                    api_params["dimensions"] = self.config.dimension
+
+                response = client.embeddings.create(**api_params)
                 batch_embeddings = [item.embedding for item in response.data]
                 all_embeddings.extend(batch_embeddings)
 
