@@ -49,7 +49,7 @@ from .exceptions import (
 )
 
 # Extract components
-from .extract import PDFValidator, PyMuPDFExtractor, ImageExtractor
+from .extract import PDFValidator, PyMuPDFExtractor, ImageExtractor, GoogleVisionExtractor, GOOGLE_VISION_AVAILABLE
 
 # Transform components
 from .transform import MarkdownParser, HybridChunker, Embedder
@@ -77,6 +77,8 @@ def extract_pdf(
         pdf_path: Path to the PDF file
         document_id: Optional document identifier (generated if not provided)
         config: Optional configuration object
+            - Set config.extraction.method = "google_vision" for OCR extraction
+            - Requires GOOGLE_APPLICATION_CREDENTIALS env variable
 
     Returns:
         Tuple of (markdown_content, metadata_dict)
@@ -85,12 +87,27 @@ def extract_pdf(
         >>> markdown, metadata = extract_pdf("document.pdf")
         >>> print(metadata["title"])
         >>> print(markdown[:500])
+
+        # With Google Vision OCR:
+        >>> from etl_pdf_pipeline import Config, ExtractionConfig
+        >>> config = Config(extraction=ExtractionConfig(method="google_vision"))
+        >>> markdown, metadata = extract_pdf("scanned.pdf", config=config)
     """
     import uuid
     from pathlib import Path
 
     cfg = config if config is not None else Config()
-    extractor = PyMuPDFExtractor(cfg)
+
+    # Select extractor based on config
+    if cfg.extraction.method == "google_vision":
+        if not GOOGLE_VISION_AVAILABLE:
+            raise ImportError(
+                "google-cloud-vision is required for Google Vision OCR. "
+                "Install with: pip install google-cloud-vision"
+            )
+        extractor = GoogleVisionExtractor(cfg)
+    else:
+        extractor = PyMuPDFExtractor(cfg)
 
     pdf_path = Path(pdf_path)
     doc_id = document_id if document_id is not None else str(uuid.uuid4())
@@ -108,6 +125,7 @@ def extract_pdf(
         "page_count": document.page_count,
         "file_hash": document.file_hash,
         "markdown_path": str(markdown_path),
+        "extraction_method": cfg.extraction.method,
     }
 
     return content, metadata
@@ -247,6 +265,8 @@ __all__ = [
     "PDFValidator",
     "PyMuPDFExtractor",
     "ImageExtractor",
+    "GoogleVisionExtractor",
+    "GOOGLE_VISION_AVAILABLE",
     # Transform
     "MarkdownParser",
     "HybridChunker",

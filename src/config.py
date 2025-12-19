@@ -43,6 +43,12 @@ class PathConfig:
 class ExtractionConfig:
     """Configuration for PDF extraction."""
 
+    # Extraction method: "pymupdf" (default) or "google_vision"
+    method: str = "pymupdf"
+
+    # Google Vision OCR settings
+    ocr_dpi: int = 300  # Resolution for page rendering
+
     # Quality thresholds for text density heuristics
     min_chars_per_page: int = 100
     min_words_per_page: int = 20
