@@ -106,7 +106,7 @@ class EmbeddingConfig:
 class Config:
     """Main configuration class."""
 
-    environment: str = field(default_factory=lambda: os.getenv("ENVIRONMENT", "local"))
+    environment: str = field(default_factory=lambda: os.getenv("ETL_ENVIRONMENT", "local"))
     openai_api_key: Optional[str] = field(
         default_factory=lambda: os.getenv("OPENAI_API_KEY")
     )

@@ -1,3 +1,4 @@
+README.md
 pyproject.toml
 etl_pdf_pipeline.egg-info/PKG-INFO
 etl_pdf_pipeline.egg-info/SOURCES.txt
@@ -28,6 +29,7 @@ src/api/routes/images.py
 src/api/routes/search.py
 src/api/routes/stats.py
 src/extract/__init__.py
+src/extract/google_vision_extractor.py
 src/extract/image_extractor.py
 src/extract/pymupdf_extractor.py
 src/extract/validator.py
