@@ -10,9 +10,7 @@ langchain
 langchain-text-splitters
 tiktoken
 
-# Embeddings
-# torch - install via conda: conda install pytorch -c pytorch
-sentence-transformers
+# Embeddings (OpenAI only)
 openai
 
 # Vector Database (Local) - LanceDB with native hybrid search

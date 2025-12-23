@@ -110,7 +110,6 @@ dependencies:
       - safetensors==0.7.0
       - scikit-learn==1.8.0
       - scipy==1.16.3
-      - sentence-transformers==5.2.0
       - six==1.17.0
       - sniffio==1.3.1
       - starlette==0.50.0
@@ -120,7 +119,6 @@ dependencies:
       - tiktoken==0.12.0
       - tokenizers==0.22.1
       - tqdm==4.67.1
-      - transformers==4.57.3
       - typing-extensions==4.15.0
       - typing-inspection==0.4.2
       - tzdata==2025.3

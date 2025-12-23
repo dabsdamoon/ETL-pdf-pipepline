@@ -102,9 +102,8 @@ config = Config(
         chunk_overlap=50,      # Overlap between chunks
     ),
     embedding=EmbeddingConfig(
-        provider="openai",     # "openai" or "local"
+        provider="openai",     # Only "openai" is supported
         openai_model="text-embedding-3-small",
-        local_model="all-MiniLM-L6-v2",
     ),
 )
 ```
@@ -113,9 +112,8 @@ config = Config(
 
 | Variable | Description | Required |
 |----------|-------------|----------|
-| `OPENAI_API_KEY` | OpenAI API key for embeddings | Yes (if using OpenAI embeddings) |
+| `OPENAI_API_KEY` | OpenAI API key for embeddings | Yes |
 | `GOOGLE_APPLICATION_CREDENTIALS` | Path to Google Cloud service account JSON | Yes (if using Google Vision OCR) |
-| `ENVIRONMENT` | Set to "production" to default to OpenAI embeddings | No |
 
 ## API Reference
 

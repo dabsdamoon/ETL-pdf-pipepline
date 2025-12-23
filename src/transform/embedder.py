@@ -14,23 +14,12 @@ class Embedder:
     Generates embeddings for text chunks.
 
     Supports:
-    - Local: sentence-transformers (all-MiniLM-L6-v2)
-    - API: OpenAI (text-embedding-3-small)
+    - API: OpenAI (text-embedding-3-small, text-embedding-3-large)
     """
 
     def __init__(self, config: EmbeddingConfig = None):
         self.config = config or EmbeddingConfig()
-        self._model = None
         self._openai_client = None
-
-    def _get_local_model(self):
-        """Lazy load the local sentence-transformers model."""
-        if self._model is None:
-            from sentence_transformers import SentenceTransformer
-
-            logger.info(f"Loading local embedding model: {self.config.local_model}")
-            self._model = SentenceTransformer(self.config.local_model)
-        return self._model
 
     def _get_openai_client(self):
         """Lazy load the OpenAI client."""
@@ -48,7 +37,7 @@ class Embedder:
 
     def embed_texts(self, texts: list[str]) -> list[list[float]]:
         """
-        Generate embeddings for a list of texts.
+        Generate embeddings for a list of texts using OpenAI API.
 
         Args:
             texts: List of text strings to embed
@@ -59,19 +48,14 @@ class Embedder:
         if not texts:
             return []
 
-        if self.config.provider == "openai":
-            return self._embed_openai(texts)
-        else:
-            return self._embed_local(texts)
+        if self.config.provider != "openai":
+            raise TransformationError(
+                f"Unsupported embedding provider: {self.config.provider}. "
+                "Only 'openai' is supported.",
+                phase="embedding",
+            )
 
-    def _embed_local(self, texts: list[str]) -> list[list[float]]:
-        """Generate embeddings using local sentence-transformers model."""
-        model = self._get_local_model()
-
-        logger.info(f"Generating {len(texts)} embeddings with local model")
-        embeddings = model.encode(texts, show_progress_bar=len(texts) > 10)
-
-        return [emb.tolist() for emb in embeddings]
+        return self._embed_openai(texts)
 
     def _embed_openai(self, texts: list[str]) -> list[list[float]]:
         """Generate embeddings using OpenAI API."""

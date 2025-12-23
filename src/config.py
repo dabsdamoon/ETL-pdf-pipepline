@@ -81,9 +81,8 @@ class ChunkingConfig:
 class EmbeddingConfig:
     """Configuration for embedding generation."""
 
-    provider: str = "local"  # "openai" or "local"
+    provider: str = "openai"  # Only "openai" is supported
     openai_model: str = "text-embedding-3-small"
-    local_model: str = "all-MiniLM-L6-v2"
     batch_size: int = 100
     # Explicit dimension override (None = use model default)
     # text-embedding-3-small default: 1536
@@ -93,13 +92,10 @@ class EmbeddingConfig:
     def __post_init__(self):
         # Set default dimension based on model if not explicitly set
         if self.dimension is None:
-            if self.provider == "openai":
-                if "large" in self.openai_model:
-                    self.dimension = 3072
-                else:
-                    self.dimension = 1536
+            if "large" in self.openai_model:
+                self.dimension = 3072
             else:
-                self.dimension = 384  # all-MiniLM-L6-v2
+                self.dimension = 1536
 
 
 @dataclass
@@ -117,9 +113,13 @@ class Config:
     embedding: EmbeddingConfig = field(default_factory=EmbeddingConfig)
 
     def __post_init__(self):
-        # Use OpenAI if API key is available and environment is production
-        if self.openai_api_key and self.environment == "production":
-            self.embedding.provider = "openai"
+        # Validate that OpenAI API key is set (required for embeddings)
+        if not self.openai_api_key:
+            import warnings
+            warnings.warn(
+                "OPENAI_API_KEY not set. Embedding generation will fail.",
+                UserWarning,
+            )
 
 
 # Global config instance
